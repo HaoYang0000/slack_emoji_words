@@ -15,7 +15,7 @@ class Character:
 
         :return: str
         """
-        return self.formatted_string.format(" " * self.SPACE_NUM, self.emoji, line_break="\n")
+        return self.formatted_string.format(':white_large_square:', self.emoji, line_break="\n")
 
 
 class A(Character):
