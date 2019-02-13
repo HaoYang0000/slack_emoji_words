@@ -1,5 +1,5 @@
-from util import Util
-from format_factory import process_each_character_per_line, process_each_word_per_line, post_format
+from slack_emoji_words.util import Util
+from slack_emoji_words.format_factory import process_each_character_per_line, process_each_word_per_line, post_format
 import sys, getopt
 
 HELP_MESSAGE = "Please pass an emoji and a sentence to print. \n\n" \

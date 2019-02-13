@@ -1,6 +1,6 @@
 import sys
-from characters import *
-from characters import GRID_SIZE
+from .characters import *
+from .characters import GRID_SIZE
 
 
 def process_each_character_per_line(emoji: str, sentence: list) -> str:
@@ -47,10 +47,12 @@ def process_each_word_per_line(emoji: str, sentence: list) -> str:
         output = output + "{line_break}"
     return output
 
+
 def post_format(output: str, padding: str, emoji: str, if_reverse: bool = False) -> str:
     if if_reverse is True:
         return output.format(emoji, padding, line_break="\n")
     return output.format(padding, emoji, line_break="\n")
+
 
 def __str_to_class(class_name: str):
     """

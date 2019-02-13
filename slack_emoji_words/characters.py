@@ -1,5 +1,6 @@
 GRID_SIZE = 7
 
+
 class Character:
     emoji = None
     formatted_string = ''
