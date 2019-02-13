@@ -1,22 +1,28 @@
+GRID_SIZE = 7
+
 class Character:
     emoji = None
     formatted_string = ''
-    SPACE_NUM = 6
 
     def __init__(self, emoji: str):
         self.emoji = emoji
 
-    def print(self) -> str:
+    def get_format(self) -> str:
         """
-        Using positional and key argument to format each word.
+        Return raw format structure with out string format
         position 0 is space.
         position 1 is emoji
         line_break is \n
 
         :return: str
         """
-        return self.formatted_string.format(':white_large_square:', self.emoji, line_break="\n")
+        return self.formatted_string
 
+    def __validate(self):
+        tokens = self.get_format().split('{line_break}')
+        if len(tokens) != GRID_SIZE:
+            return False
+        return True
 
 class A(Character):
     def __init__(self, emoji):
@@ -59,7 +65,6 @@ class D(Character):
         super().__init__(emoji=emoji)
         self.formatted_string = "{1}{1}{1}{0}{0}{0}{0}{line_break}" \
                                 "{1}{0}{0}{1}{1}{0}{0}{line_break}" \
-                                "{1}{0}{0}{0}{0}{1}{0}{line_break}" \
                                 "{1}{0}{0}{0}{0}{1}{0}{line_break}" \
                                 "{1}{0}{0}{0}{0}{1}{0}{line_break}" \
                                 "{1}{0}{0}{0}{0}{1}{0}{line_break}" \

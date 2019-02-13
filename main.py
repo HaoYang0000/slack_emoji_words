@@ -1,5 +1,6 @@
-import sys, getopt, os, platform
-from characters import *
+from util import Util
+from format_factory import process_each_character_per_line, process_each_word_per_line, post_format
+import sys, getopt
 
 HELP_MESSAGE = "Please pass an emoji and a sentence to print. \n\n" \
                "Format: python ./main.py {SLACK_EMOJI} {WORDS_OR_SENTENCE_YOU_WANT_TO_PRINT} \n\n" \
@@ -21,6 +22,9 @@ def main(argv):
     if_same_line = False
     # If copy to clipboard automatically
     if_copy_to_clipboard = False
+    # If reverse the white board and emoji
+    if_reverse = False
+    padding = ':white_large_square:'
 
     # Check if argument is enough
     if len(argv) <= 1:
@@ -29,7 +33,7 @@ def main(argv):
 
     # Read options
     try:
-        opts, args = getopt.getopt(argv, "chs")
+        opts, args = getopt.getopt(argv, "chsrp:", ["padding="])
     except getopt.GetoptError as error:
         print(HELP_MESSAGE)
         sys.exit(2)
@@ -41,70 +45,25 @@ def main(argv):
             if_same_line = True
         elif opt == "-c":
             if_copy_to_clipboard = True
+        elif opt == "-r":
+            if_reverse = True
+        elif opt in ("-p", "--padding"):
+            padding = arg
 
-    # Set up emoji to use, could be multiple
-    # Todo: Add validation maybe
+    # Set up emoji to use
     emoji = args[0]
 
-    # Generate output
+    # Generate output format
     if if_same_line is False:
-        output = __process_each_character_per_line(emoji=emoji, sentence=args[1:])
+        output = process_each_character_per_line(emoji=emoji, sentence=args[1:])
     else:
-        output = __process_each_character_same_line(emoji=emoji, sentence=args[1:])
+        output = process_each_word_per_line(emoji=emoji, sentence=args[1:])
 
+    # Format output
+    output = post_format(output=output, padding=padding, emoji=emoji, if_reverse=if_reverse)
     if if_copy_to_clipboard is True:
-        add_to_clipboard(output)
+        Util.add_to_clipboard(output)
     print(output)
-
-def add_to_clipboard(output):
-    # TODO: Fix this method.
-    if platform.system() == 'Windows':
-        command = 'echo ' + output.strip() + '| clip'
-        os.system(command)
-    else:
-        os.system("echo '%s' | pbcopy" % output)
-
-def __str_to_class(class_name: str):
-    """
-    Convert string of class name to class
-    :param str:class_name
-    :return: class
-    """
-    try:
-        return getattr(sys.modules[__name__], class_name)
-    except AttributeError:
-        print("The character {character} is not implemented yet :( ".format(character=class_name))
-        return None
-
-
-def __process_each_character_per_line(emoji: str, sentence: list) -> str:
-    """
-    Process each word, and print out each character to per line
-    :param emoji:
-    :param sentence:
-    :return:
-    """
-    output = "\n"
-    # Append every word in array
-    for words in sentence:
-        # Process each character
-        for character in words:
-            class_name = character
-            word = __str_to_class(class_name.upper())
-            if word is not None:
-                output = output + word(emoji=emoji).print() + "\n"
-        output = output + "\n"
-    return output
-
-
-def __process_each_character_same_line(emoji: str, sentence: list):
-    """
-    Process each word, and print out each character for a word on the same line
-    :param emoji:
-    :param sentence:
-    :return:
-    """
-    return "This is not done yet :("
 
 
 if __name__ == "__main__":
