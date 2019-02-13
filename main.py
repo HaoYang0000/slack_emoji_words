@@ -17,23 +17,19 @@ def main(argv):
     :param argv:
     :return:
     """
-    emoji = None
+    emoji = ':dealwithit:'
+    padding = ':white_large_square:'
+    input = 'DEAL with it'
     # If print the word in same line
     if_same_line = False
     # If copy to clipboard automatically
     if_copy_to_clipboard = False
     # If reverse the white board and emoji
     if_reverse = False
-    padding = ':white_large_square:'
-
-    # Check if argument is enough
-    if len(argv) <= 1:
-        print(HELP_MESSAGE)
-        sys.exit(0)
 
     # Read options
     try:
-        opts, args = getopt.getopt(argv, "chsrp:", ["padding="])
+        opts, args = getopt.getopt(argv, "chsrp:e:i:", ["padding=","emoji=","input="])
     except getopt.GetoptError as error:
         print(HELP_MESSAGE)
         sys.exit(2)
@@ -49,15 +45,16 @@ def main(argv):
             if_reverse = True
         elif opt in ("-p", "--padding"):
             padding = arg
-
-    # Set up emoji to use
-    emoji = args[0]
+        elif opt in ("-e", "--emoji"):
+            emoji = arg
+        elif opt in ("-i", "--input"):
+            input = arg
 
     # Generate output format
     if if_same_line is False:
-        output = process_each_character_per_line(emoji=emoji, sentence=args[1:])
+        output = process_each_character_per_line(emoji=emoji, sentence=input.split(' '))
     else:
-        output = process_each_word_per_line(emoji=emoji, sentence=args[1:])
+        output = process_each_word_per_line(emoji=emoji, sentence=input.split(' '))
 
     # Format output
     output = post_format(output=output, padding=padding, emoji=emoji, if_reverse=if_reverse)
