@@ -1,5 +1,5 @@
 from slack_emoji_words.util import Util
-from slack_emoji_words.format_factory import process_each_character_per_line, process_each_word_per_line, post_format
+from slack_emoji_words.run import generate
 import sys, getopt
 
 HELP_MESSAGE = "Please pass an emoji and a sentence to print. \n\n" \
@@ -29,7 +29,7 @@ def main(argv):
 
     # Read options
     try:
-        opts, args = getopt.getopt(argv, "chsrp:e:i:", ["padding=","emoji=","input="])
+        opts, args = getopt.getopt(argv, "chsrp:e:i:", ["padding=", "emoji=", "input="])
     except getopt.GetoptError as error:
         print(HELP_MESSAGE)
         sys.exit(2)
@@ -50,14 +50,9 @@ def main(argv):
         elif opt in ("-i", "--input"):
             input = arg
 
-    # Generate output format
-    if if_same_line is False:
-        output = process_each_character_per_line(emoji=emoji, sentence=input.split(' '))
-    else:
-        output = process_each_word_per_line(emoji=emoji, sentence=input.split(' '))
+    output = generate(emoji=emoji, padding=padding, input=input, if_same_line=if_same_line,
+                      if_copy_to_clipboard=if_copy_to_clipboard, if_reverse=if_reverse)
 
-    # Format output
-    output = post_format(output=output, padding=padding, emoji=emoji, if_reverse=if_reverse)
     if if_copy_to_clipboard is True:
         Util.add_to_clipboard(output)
     print(output)
