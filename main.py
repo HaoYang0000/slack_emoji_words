@@ -11,6 +11,28 @@ HELP_MESSAGE = "Please pass an emoji and a sentence to print. \n\n" \
                ";-) \n"
 
 
+@staticmethod
+def generate(
+    emoji: str = ':dealwithit:', 
+    padding: str = ':white_large_square:', 
+    input: str = 'DEAL with it', 
+    if_same_line: bool = False, 
+    if_copy_to_clipboard: bool = False, 
+    if_reverse: bool = False
+) -> str:
+    # Generate output format
+    if if_same_line is False:
+        output = process_each_character_per_line(emoji=emoji, sentence=input.split(' '))
+    else:
+        output = process_each_word_per_line(emoji=emoji, sentence=input.split(' '))
+
+    # Format output
+    output = post_format(output=output, padding=padding, emoji=emoji, if_reverse=if_reverse)
+    if if_copy_to_clipboard is True:
+        Util.add_to_clipboard(output)
+    return output
+
+
 def main(argv):
     """
     Main method to run, read command line argument
