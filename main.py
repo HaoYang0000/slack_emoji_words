@@ -11,7 +11,6 @@ HELP_MESSAGE = "Please pass an emoji and a sentence to print. \n\n" \
                ";-) \n"
 
 
-@staticmethod
 def generate(
     emoji: str = ':dealwithit:', 
     padding: str = ':white_large_square:', 
